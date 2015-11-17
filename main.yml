@@ -1,0 +1,42 @@
+---
+
+# Deploys <your project>
+# Author: Scott Sappenfield
+# Example run against an internal server: ~/playbooks/ansible-deploy<your project>$ ansible-playbook main.yml -vvvv
+# Example run against an EC2 server: ~/playbooks/ansible-deploy<your project>$ ansible-playbook main.yml -vvvv --private-key=~/.ssh/<your project>.pem
+
+- name: 'Deploy a specified <your project> build to a server'
+
+  vars_prompt:
+  - name: "<your project>_build_number"
+    prompt: "Specify the <your project> build number (e.g. 930)"
+    private: no
+
+  - name: "<your project>_release_number"
+    prompt: "Specify the <your project> release number (e.g. 2.2.0)"
+    private: no
+
+  - name: "deployment_target"
+    prompt: "Specify the individual or group <your project> deployment target (<yourserver.foo.com>)"
+    private: no
+
+  hosts: "{{ deployment_target }}"
+  
+  #vars:
+    #var_deployment_target: "{{ deployment_target }}"
+
+  roles:
+    - '.'      # This role itself
+  
+  tasks:
+    - name: "Verify user input"
+      fail: msg="Please provide the requested information to deploy <your project>"
+      when: <your project>_build_number == "" or <your project>_release_number == "" or deployment_target == ""
+
+  tasks:
+    - name: "Echo user input"
+      debug: msg="Details of the deploy job {{ <your project>_build_number }} | {{ <your project>_release_number }} | {{ deployment_target }} | {{ deployment_user }} | {{ backup_server_yml_file }} | {{ backup_worker_yml_file }}"
+
+    - include: downloadupload.<your project>.yml
+    - include: backup.<your project>settings.yml
+    - include: deploy.<your project>.yml

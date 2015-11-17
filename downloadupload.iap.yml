@@ -1,0 +1,15 @@
+---
+
+- name: "Download <your project> build {{ <your project>_build_number }} for release {{ <your project>_release_number }}"
+  local_action: get_url url=http://build.foo.com/browse/{{ <your project>_build_number }}/{{ <your project>_release_number }}.tar.gz dest=/home/scotts/playbooks/ansible-deploy<your project>/{{ <your project>_release_number }}.tar.gz force=yes
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Upload <your project> build to destination"
+  copy: src=/home/scotts/playbooks/ansible-deploy<your project>/{{ <your project>_release_number }}.tar.gz dest=/home/{{ deployment_user }} force=yes
+
+- name: "Delete downloaded <your project> build"
+  local_action: command rm /home/scotts/playbooks/ansible-deploy<your project>/{{ <your project>_release_number }}.tar.gz
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes

@@ -1,0 +1,71 @@
+---
+
+- name: "Create empty <your project> application directory"
+  file: path=/home/{{ deployment_user }}/application state=directory
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Create empty <your project> application etc directory"
+  file: path=/home/{{ deployment_user }}/application/etc state=directory
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Replace the backup start.sh file"
+  command: "cp -f /home/{{ deployment_user }}/deploytemp/start.sh /home/{{ deployment_user }}/application/start.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Replace the backup start-migration.sh file"
+  command: "cp -f /home/{{ deployment_user }}/deploytemp/start-migration.sh /home/{{ deployment_user }}/application/start-migration.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Replace the backup SERVER_YML file"
+  command: "cp -f /home/{{ deployment_user }}/deploytemp/{{ backup_server_yml_file }} /home/{{ deployment_user }}/application/etc/{{ backup_server_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Replace the backup WORKER_YML file"
+  command: "cp -f /home/{{ deployment_user }}/deploytemp/{{ backup_worker_yml_file }} /home/{{ deployment_user }}/application/etc/{{ backup_worker_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Replace the backup deploy-migrate.sh file"
+  command: "cp -f /home/{{ deployment_user }}/deploytemp/deploy-migrate.sh /home/{{ deployment_user }}/deploy-migrate.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Change permissions of application directory"
+  command: "chmod 775 /home/{{ deployment_user }}/application/start.sh"
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Change permissions of application directory"
+  command: "chmod 775 /home/{{ deployment_user }}/application/start-migration.sh"
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Change permissions of application directory"
+  command: "chmod 775 /home/{{ deployment_user }}/application/etc/{{ backup_server_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Change permissions of application directory"
+  command: "chmod 775 /home/{{ deployment_user }}/application/etc/{{ backup_worker_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Change permissions of application directory"
+  command: "chmod 775 /home/{{ deployment_user }}/deploy-migrate.sh"
+  sudo: yes
+  sudo_user: scotts
+
+- name: "Deploy the <your project> application tar"
+command: "/home/{{ deployment_user }}/deploy-migrate.sh {{ <your project>_release_number }}.tar.gz"
+  sudo: yes
+  sudo_user: scotts

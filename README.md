@@ -12,3 +12,5 @@ main.yml is your playbook and will use the following files:
 - deploy.iap.yml - deploy the application (in this case a JAR) and fire up services
 
 Hopefully you will get a sense as to how easy this is to work with (Ansible). You can create your own playbook (main.yml and /tasks) to do fun and useful administration work.
+
+Note: you will need to install ansible, python and python-boto, but you can get all that from Ansible's install page

@@ -1,0 +1,49 @@
+---
+
+- name: "Create temporary backup directory"
+  file: path=/home/{{ deployment_user }}/deploytemp state=directory
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Change permissions of temporary directory"
+  command: "chmod 775 /home/{{ deployment_user }}/deploytemp"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Backup the in-use SERVER_YML configuration file"
+  command: "cp /home/{{ deployment_user }}/application/etc/{{ backup_server_yml_file }} /home/{{ deployment_user }}/deploytemp/{{ backup_server_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Backup the in-use WORKER_YML configuration file"
+  command: "cp /home/{{ deployment_user }}/application/etc/{{ backup_worker_yml_file }} /home/{{ deployment_user }}/deploytemp/{{ backup_worker_yml_file }}"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Backup the start-migration.sh file"
+  command: "cp /home/{{ deployment_user }}/application/start-migration.sh /home/{{ deployment_user }}/deploytemp/start-migration.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+
+- name: "Backup the start.sh file"
+  command: "cp /home/{{ deployment_user }}/application/start.sh /home/{{ deployment_user }}/deploytemp/start.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+  
+- name: "Backup the deploy-migrate.sh file"
+  command: "cp /home/{{ deployment_user }}/deploy-migrate.sh /home/{{ deployment_user }}/deploytemp/deploy-migrate.sh"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
+  
+- name: "For safe measure, backup all the <your project> etc/YML files just in case, to be deleted manually by user later"
+  command: "tar cvfP /home/{{ deployment_user }}/appetctempbackup.tar /home/{{ deployment_user }}/application/etc/"
+  sudo: yes
+  sudo_user: scotts
+  ignore_errors: yes
